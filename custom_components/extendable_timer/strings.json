@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Extendable Timer",
+        "description": "Create a sleep-timer-style countdown. Press extend to add time; press cancel to stop without firing. To run an action when the timer expires, add an automation with the device's 'expired' trigger.",
+        "data": {
+          "name": "Name",
+          "extend_duration": "Default extend amount",
+          "stale_threshold_minutes": "Stale-fire threshold (minutes; 0 = never fire stale)"
+        }
+      }
+    },
+    "error": {
+      "name_required": "Name is required.",
+      "extend_duration_out_of_range": "Extend amount must be at least 1 second and at most 24 hours."
+    },
+    "abort": {
+      "already_configured": "An extendable timer with this name already exists."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Extendable Timer",
+        "data": {
+          "extend_duration": "Default extend amount",
+          "stale_threshold_minutes": "Stale-fire threshold (minutes; 0 = never fire stale)"
+        }
+      }
+    },
+    "error": {
+      "extend_duration_out_of_range": "Extend amount must be at least 1 second and at most 24 hours."
+    }
+  },
+  "device_automation": {
+    "trigger_type": {
+      "finished": "Timer finished"
+    }
+  }
+}

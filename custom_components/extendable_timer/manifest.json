@@ -1,0 +1,12 @@
+{
+  "domain": "extendable_timer",
+  "name": "Extendable Timer",
+  "version": "0.1.0",
+  "config_flow": true,
+  "documentation": "https://github.com/evaneaston/ha-extendable-timer",
+  "issue_tracker": "https://github.com/evaneaston/ha-apps/issues",
+  "codeowners": ["@evaneaston"],
+  "iot_class": "local_push",
+  "integration_type": "device",
+  "requirements": []
+}
