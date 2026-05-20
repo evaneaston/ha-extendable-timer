@@ -18,7 +18,10 @@ from .const import (
     CONF_STALE_THRESHOLD_MINUTES,
     DEFAULT_EXTEND_SECONDS,
     DEFAULT_STALE_THRESHOLD_MINUTES,
+    EVENT_CANCELED,
+    EVENT_EXTENDED,
     EVENT_FINISHED,
+    EVENT_STARTED,
     SIGNAL_STATE_CHANGED,
 )
 from .logic import (
@@ -161,10 +164,19 @@ class ExtendableTimerController:
     # --- User actions ---
 
     async def async_extend(self) -> None:
-        """Extend the timer by the configured duration and notify entities."""
+        """Extend the timer by the configured duration and notify entities.
+
+        Fires EVENT_STARTED if the timer was previously idle or expired, or
+        EVENT_EXTENDED if it was already counting. The idle predicate
+        matches compute_extended_finish (None or finish in the past) so the
+        events stay consistent with the state machine.
+        """
+        now = _utcnow()
+        previous = self._finishes_at
+        was_idle = previous is None or previous < now
         new_finish = compute_extended_finish(
-            now=_utcnow(),
-            current_finishes_at=self._finishes_at,
+            now=now,
+            current_finishes_at=previous,
             extend_seconds=self.extend_seconds,
         )
         # In-memory immediately so entities see new state right away;
@@ -175,11 +187,50 @@ class ExtendableTimerController:
         self._schedule_expiry()
         self._notify()
 
+        common = {
+            "instance_name": self.name,
+            "config_entry_id": self.entry.entry_id,
+            "finishes_at": new_finish.isoformat(),
+        }
+        if was_idle:
+            self.hass.bus.async_fire(EVENT_STARTED, common)
+        else:
+            assert previous is not None  # was_idle False -> previous is in the future
+            self.hass.bus.async_fire(
+                EVENT_EXTENDED,
+                {
+                    **common,
+                    "previous_finishes_at": previous.isoformat(),
+                    "extend_seconds": self.extend_seconds,
+                },
+            )
+
     async def async_cancel(self) -> None:
-        """Cancel the timer immediately and notify entities."""
+        """Cancel the timer immediately and notify entities.
+
+        Fires EVENT_CANCELED only when there was a running timer to cancel
+        (was_active). Pressing Cancel while idle is a no-op event-wise so
+        automations don't see spurious cancel events on idle button mashing.
+        """
+        now = _utcnow()
+        previous = self._finishes_at
+        was_active = previous is not None and previous > now
+        remaining_at_cancel = compute_remaining_seconds(now=now, finishes_at=previous)
         await self._async_persist_immediate(None)
         self._cancel_scheduled()
         self._notify()
+
+        if was_active:
+            assert previous is not None  # was_active True -> previous is in the future
+            self.hass.bus.async_fire(
+                EVENT_CANCELED,
+                {
+                    "instance_name": self.name,
+                    "config_entry_id": self.entry.entry_id,
+                    "previous_finishes_at": previous.isoformat(),
+                    "remaining_seconds": remaining_at_cancel,
+                },
+            )
 
     # --- Internal ---
 

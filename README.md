@@ -65,10 +65,27 @@ are standard buttons and a sensor — `button.press` and the usual
 
 ## Automations
 
-Each timer device exposes a `finished` device trigger. Use it in the
-automation editor to react to a timer reaching zero (e.g. turn off the fan,
-play a chime). The trigger fires once per timer expiry, including stale
-expiries that happened while HA was down.
+Each timer device exposes four device triggers — one per state change —
+selectable from the automation editor's trigger dropdown:
+
+| Trigger          | When it fires                                                |
+|------------------|--------------------------------------------------------------|
+| Timer started    | The timer was idle and an Extend press kicked it off.        |
+| Timer extended   | Extend pressed while already running (finish time pushed out). |
+| Timer canceled   | Cancel pressed before the timer reached zero.                |
+| Timer finished   | The timer reached zero, including stale expiries that happened while HA was down. |
+
+Pressing the Extend or Cancel buttons themselves also fires HA's
+standard `<name> Extend has been pressed` / `<name> Cancel has been
+pressed` button-device triggers — those track UI presses, while the
+four above track the resulting *state changes* (so pressing Cancel
+while the timer is already idle fires nothing).
+
+Each event carries `instance_name` and `config_entry_id` plus
+trigger-specific fields (`finishes_at`, `previous_finishes_at`,
+`extend_seconds`, `remaining_seconds`, `was_stale`, `staleness_seconds`)
+visible in the trigger's `trigger.event.data` when used as a YAML
+template variable.
 
 ## Compatibility
 

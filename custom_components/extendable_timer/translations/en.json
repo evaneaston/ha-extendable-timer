@@ -35,6 +35,9 @@
   },
   "device_automation": {
     "trigger_type": {
+      "started": "Timer started",
+      "extended": "Timer extended",
+      "canceled": "Timer canceled",
       "finished": "Timer finished"
     }
   }

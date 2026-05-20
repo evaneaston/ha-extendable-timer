@@ -1,11 +1,11 @@
-"""Device-trigger platform — expose timer-finished as a selectable trigger.
+"""Device-trigger platform — expose timer state-change events as triggers.
 
 Buttons are exposed as device triggers automatically by HA's button
-platform. The "finished" event is not — it's a custom bus event. This
-module wires that event to a per-device trigger so users can drop
-"Timer finished" into the automation editor's trigger dropdown
-alongside "<name> Extend has been pressed" / "<name> Cancel has been
-pressed".
+platform (those fire on the UI press, not the state change). The
+controller's custom state-change events are not auto-exposed — this
+module wires each one to a per-device trigger so users can pick
+"Timer started" / "Timer extended" / "Timer canceled" / "Timer finished"
+from the automation editor's trigger dropdown.
 """
 
 from typing import Any
@@ -20,10 +20,24 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.trigger import TriggerActionType, TriggerInfo
 from homeassistant.helpers.typing import ConfigType
 
-from .const import DOMAIN, EVENT_FINISHED
+from .const import DOMAIN, EVENT_CANCELED, EVENT_EXTENDED, EVENT_FINISHED, EVENT_STARTED
 
+TRIGGER_STARTED = "started"
+TRIGGER_EXTENDED = "extended"
+TRIGGER_CANCELED = "canceled"
 TRIGGER_FINISHED = "finished"
-TRIGGER_TYPES = {TRIGGER_FINISHED}
+
+# Trigger type -> bus event the controller fires. Keys here drive both
+# the automation-editor dropdown (via the device_automation.trigger_type
+# translation strings) and the event-trigger wiring below.
+TRIGGER_TYPE_TO_EVENT = {
+    TRIGGER_STARTED: EVENT_STARTED,
+    TRIGGER_EXTENDED: EVENT_EXTENDED,
+    TRIGGER_CANCELED: EVENT_CANCELED,
+    TRIGGER_FINISHED: EVENT_FINISHED,
+}
+
+TRIGGER_TYPES = set(TRIGGER_TYPE_TO_EVENT)
 
 TRIGGER_SCHEMA = DEVICE_TRIGGER_BASE_SCHEMA.extend(
     {vol.Required(CONF_TYPE): vol.In(TRIGGER_TYPES)}
@@ -39,8 +53,9 @@ async def async_get_triggers(
             CONF_PLATFORM: "device",
             CONF_DOMAIN: DOMAIN,
             CONF_DEVICE_ID: device_id,
-            CONF_TYPE: TRIGGER_FINISHED,
+            CONF_TYPE: trigger_type,
         }
+        for trigger_type in TRIGGER_TYPE_TO_EVENT
     ]
 
 
@@ -59,10 +74,12 @@ async def async_attach_trigger(
                 entry_id = e
                 break
 
+    event_type = TRIGGER_TYPE_TO_EVENT[config[CONF_TYPE]]
+
     event_config = event_trigger.TRIGGER_SCHEMA(
         {
             event_trigger.CONF_PLATFORM: "event",
-            event_trigger.CONF_EVENT_TYPE: EVENT_FINISHED,
+            event_trigger.CONF_EVENT_TYPE: event_type,
             event_trigger.CONF_EVENT_DATA: {"config_entry_id": entry_id},
         }
     )
