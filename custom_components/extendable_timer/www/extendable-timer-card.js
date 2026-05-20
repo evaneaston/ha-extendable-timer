@@ -459,7 +459,12 @@ class ExtendableTimerCardEditor extends HTMLElement {
       const form = document.createElement("ha-form");
       form.computeLabel = (s) => (s.name === "device" ? "Extendable Timer device" : s.name);
       form.addEventListener("value-changed", (ev) => {
-        const next = { ...(ev.detail?.value || {}) };
+        // Merge form output into the *existing* config so top-level
+        // keys we don't render in the form survive — most importantly
+        // `type`, which HA's lovelace preview needs to render the card
+        // and which it strips here if we replace the object outright
+        // ("No card type configured." in the preview pane).
+        const next = { ...this._config, ...(ev.detail?.value || {}) };
         if (next.device === this._config.device) return;
         this._config = next;
         this.dispatchEvent(
