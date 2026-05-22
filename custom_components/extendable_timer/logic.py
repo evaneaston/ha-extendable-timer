@@ -3,9 +3,9 @@
 No Home Assistant imports — these run in unit tests without a HA core.
 """
 
+import math
 from datetime import datetime, timedelta
 from enum import Enum
-import math
 
 
 class StartupCase(Enum):

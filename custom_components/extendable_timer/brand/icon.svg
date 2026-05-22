@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <path d="M 153.36 222.66 A 98 98 0 0 1 130.81 225.96" stroke="#BBDEFB" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 122.51 225.85 A 98 98 0 0 1 100.05 221.93" stroke="#AED2F4" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 92.20 219.23 A 98 98 0 0 1 72.09 208.49" stroke="#A0C7ED" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 65.48 203.46 A 98 98 0 0 1 49.73 186.98" stroke="#93BBE6" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 45.02 180.14 A 98 98 0 0 1 35.22 159.56" stroke="#85B0DF" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 32.88 151.59 A 98 98 0 0 1 30.00 128.98" stroke="#78A4D8" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 30.27 120.68 A 98 98 0 0 1 34.61 98.30" stroke="#6B98D1" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 37.46 90.50 A 98 98 0 0 1 48.57 70.59" stroke="#5D8DCB" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 53.72 64.08 A 98 98 0 0 1 70.50 48.64" stroke="#5081C4" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 77.42 44.06 A 98 98 0 0 1 98.18 34.65" stroke="#4375BD" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 106.19 32.46 A 98 98 0 0 1 128.86 30.00" stroke="#356AB6" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 137.15 30.43 A 98 98 0 0 1 159.44 35.18" stroke="#285EAF" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 167.19 38.18 A 98 98 0 0 1 186.88 49.66" stroke="#1A53A8" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 193.30 54.93 A 98 98 0 0 1 208.42 71.99" stroke="#0D47A1" stroke-width="22" stroke-linecap="butt" fill="none"/>
+  <path d="M 128 86 L 128 170 M 86 128 L 170 128" stroke="#4CAF50" stroke-width="22" stroke-linecap="round" fill="none"/>
+  <circle cx="202" cy="202" r="38" fill="#F44336"/>
+  <rect x="187" y="187" width="30" height="30" rx="3" fill="#FFFFFF"/>
+</svg>

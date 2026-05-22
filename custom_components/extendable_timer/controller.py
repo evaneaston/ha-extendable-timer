@@ -1,7 +1,7 @@
 """ExtendableTimerController — durable state, scheduling, expiry firing."""
 
-from datetime import UTC, datetime
 import logging
+from datetime import UTC, datetime
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
@@ -335,7 +335,7 @@ class ExtendableTimerController:
                 await self.hass.services.async_call(
                     "script", "turn_on", {"entity_id": script_entity}, blocking=False
                 )
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 _LOGGER.warning(
                     "%s expiry script call failed for %s: %s",
                     self.name,

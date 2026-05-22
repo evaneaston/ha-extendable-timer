@@ -69,7 +69,7 @@ async def _async_register_lovelace_resource(hass: HomeAssistant) -> bool:
     if not getattr(resources, "loaded", True):
         try:
             await resources.async_load()
-        except Exception as err:  # noqa: BLE001
+        except Exception as err:
             _LOGGER.debug("lovelace resources async_load failed: %s", err)
             return False
 
@@ -79,7 +79,7 @@ async def _async_register_lovelace_resource(hass: HomeAssistant) -> bool:
                 hass.data[DOMAIN]["_card_resource_registered"] = True
                 return True
         await resources.async_create_item({"url": CARD_URL, "res_type": "module"})
-    except Exception as err:  # noqa: BLE001
+    except Exception as err:
         _LOGGER.debug("lovelace resource registration failed: %s", err)
         return False
 

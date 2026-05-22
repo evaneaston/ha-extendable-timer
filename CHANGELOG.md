@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.0.0]
+
+- **Brand icon.** Adds the HACS brand assets (`brand/icon.png`, `brand/icon@2x.png`) that the validation pipeline requires. No functional change.
+- **Stable API.** Bumping to 1.0 to signal that the entity surface (remaining-time sensor, extend/cancel buttons, configured-extend `extend_seconds` attribute), the event surface (`extendable_timer_started` / `_extended` / `_canceled` / `_finished` with their payload fields), the device triggers, and the Lovelace card config schema are now under semver. Breaking changes will bump the major.
+
 ## [v0.1.2]
 
 - **New state-change events and device triggers.** Three new triggers join the existing `Timer finished`:
